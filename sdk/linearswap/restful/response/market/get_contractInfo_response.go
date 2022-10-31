@@ -12,9 +12,9 @@ type GetContractInfoResponse struct {
 
 		ContractCode string `json:"contract_code"`
 
-		ContractSize float32 `json:"contract_size"`
+		ContractSize float64 `json:"contract_size"`
 
-		PriceTick float32 `json:"price_tick"`
+		PriceTick float64 `json:"price_tick"`
 
 		SettlementDate string `json:"settlement_date"`
 
