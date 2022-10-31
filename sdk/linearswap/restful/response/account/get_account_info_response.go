@@ -8,59 +8,46 @@ type GetAccountInfoResponse struct {
 	ErrorMessage string `json:"err_msg,omitempty"`
 
 	Data []struct {
-		Symbol string `json:"symbol"`
-
-		ContractCode string `json:"contract_code"`
-
-		MarginAsset string `json:"margin_asset"`
-
-		MarginBalance float32 `json:"margin_balance"`
-
-		MarginStatic float32 `json:"margin_static"`
-
-		MarginPosition float32 `json:"margin_position"`
-
-		MarginFrozen float32 `json:"margin_frozen"`
-
-		MarginAvailable float32 `json:"margin_available"`
-
-		ProfitReal float32 `json:"profit_real"`
-
-		ProfitUnreal float32 `json:"profit_unreal"`
-
-		WithdrawAvailable float32 `json:"withdraw_available,omitempty"`
-
-		RiskRate float32 `json:"risk_rate,omitempty"`
-
-		LiquidationPrice float32 `json:"liquidation_price,omitempty"`
-
-		LeverRate float32 `json:"lever_rate"`
-
-		AdjustFactor float32 `json:"adjust_factor"`
-
-		MarginMode string `json:"margin_mode"`
-
-		MarginAccount string `json:"margin_account"`
-
-		ContractDetail []struct {
-			Symbol string `json:"symbol"`
-
-			ContractCode string `json:"contract_code"`
-
-			MarginPosition float32 `json:"margin_position"`
-
-			MarginFrozen float32 `json:"margin_frozen"`
-
-			MarginAvailable float32 `json:"margin_available"`
-
-			ProfitUnreal float32 `json:"profit_unreal"`
-
-			LiquidationPrice float32 `json:"liquidation_price"`
-
-			LeverRate float32 `json:"lever_rate"`
-
-			AdjustFactor float32 `json:"adjust_factor"`
-		} `json:"contract_detail,omitempty"`
+		FuturesContractDetail []struct {
+			Symbol           string      `json:"symbol"`
+			ContractCode     string      `json:"contract_code"`
+			MarginPosition   int         `json:"margin_position"`
+			MarginFrozen     int         `json:"margin_frozen"`
+			MarginAvailable  float64     `json:"margin_available"`
+			ProfitUnreal     float64     `json:"profit_unreal"`
+			LiquidationPrice interface{} `json:"liquidation_price"`
+			LeverRate        int         `json:"lever_rate"`
+			AdjustFactor     float64     `json:"adjust_factor"`
+			ContractType     string      `json:"contract_type"`
+			Pair             string      `json:"pair"`
+			BusinessType     string      `json:"business_type"`
+		} `json:"futures_contract_detail"`
+		MarginMode        string      `json:"margin_mode"`
+		MarginAccount     string      `json:"margin_account"`
+		MarginAsset       string      `json:"margin_asset"`
+		MarginBalance     float64     `json:"margin_balance"`
+		MarginStatic      float64     `json:"margin_static"`
+		MarginPosition    int         `json:"margin_position"`
+		MarginFrozen      int         `json:"margin_frozen"`
+		ProfitReal        float64     `json:"profit_real"`
+		ProfitUnreal      int         `json:"profit_unreal"`
+		WithdrawAvailable float64     `json:"withdraw_available"`
+		RiskRate          interface{} `json:"risk_rate"`
+		PositionMode      string      `json:"position_mode"`
+		ContractDetail    []struct {
+			Symbol           string      `json:"symbol"`
+			ContractCode     string      `json:"contract_code"`
+			MarginPosition   int         `json:"margin_position"`
+			MarginFrozen     int         `json:"margin_frozen"`
+			MarginAvailable  float64     `json:"margin_available"`
+			ProfitUnreal     float64     `json:"profit_unreal"`
+			LiquidationPrice interface{} `json:"liquidation_price"`
+			LeverRate        int         `json:"lever_rate"`
+			AdjustFactor     float64     `json:"adjust_factor"`
+			ContractType     string      `json:"contract_type"`
+			Pair             string      `json:"pair"`
+			BusinessType     string      `json:"business_type"`
+		} `json:"contract_detail"`
 	} `json:"data,omitempty"`
 
 	Ts int64 `json:"ts"`
