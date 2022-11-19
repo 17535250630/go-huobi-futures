@@ -204,6 +204,25 @@ func (oc *OrderClient) IsolatedSwitchLeverRateAsync(data chan responseorder.Swit
 	data <- result
 }
 
+func (oc *OrderClient) CrossSwitchPositionModeAsync(data chan responseorder.SwitchPositionModeResponse, positionMode string) {
+	// url
+	url := oc.PUrlBuilder.Build(linearswap.POST_METHOD, "/linear-swap-api/v1/swap_cross_switch_position_mode", nil)
+
+	// content
+	content := fmt.Sprintf("{\"margin_account\": \"%s\", \"position_mode\": %s}", "USDT", positionMode)
+
+	getResp, getErr := reqbuilder.HttpPost(url, content)
+	if getErr != nil {
+		log.Error("http get error: %s", getErr)
+	}
+	result := responseorder.SwitchPositionModeResponse{}
+	jsonErr := json.Unmarshal([]byte(getResp), &result)
+	if jsonErr != nil {
+		log.Error("convert json to SwitchLeverRateResponse error: %s", getErr)
+	}
+	data <- result
+}
+
 func (oc *OrderClient) CrossSwitchLeverRateAsync(data chan responseorder.SwitchLeverRateResponse, contractCode string, leverRate int) {
 	// url
 	url := oc.PUrlBuilder.Build(linearswap.POST_METHOD, "/linear-swap-api/v1/swap_cross_switch_lever_rate", nil)
