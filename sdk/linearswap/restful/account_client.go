@@ -46,6 +46,36 @@ func (ac *AccountClient) GetBalanceValuationAsync(data chan account.GetBalanceVa
 	data <- result
 }
 
+func (ac *AccountClient) GetAccountTypeAsync(data chan account.GetAccountTypeResponse) {
+	url := ac.PUrlBuilder.Build(linearswap.POST_METHOD, "/linear-swap-api/v3/swap_unified_account_type", nil)
+
+	getResp, getErr := reqbuilder.HttpGet(url)
+	if getErr != nil {
+		log.Error("http get error: %s", getErr)
+	}
+	result := account.GetAccountTypeResponse{}
+	jsonErr := json.Unmarshal([]byte(getResp), &result)
+	if jsonErr != nil {
+		log.Error("convert json to GetAccountTypeAsync error: %s", jsonErr)
+	}
+	data <- result
+}
+
+func (ac *AccountClient) SwitchAccountTypeAsync(data chan account.SwitchAccountType) {
+	url := ac.PUrlBuilder.Build(linearswap.POST_METHOD, "/linear-swap-api/v3/swap_switch_account_type", nil)
+	content := fmt.Sprintf("{\"account_type\": %d}", 1)
+	getResp, getErr := reqbuilder.HttpPost(url, content)
+	if getErr != nil {
+		log.Error("http get error: %s", getErr)
+	}
+	result := account.SwitchAccountType{}
+	jsonErr := json.Unmarshal([]byte(getResp), &result)
+	if jsonErr != nil {
+		log.Error("convert json to GetAccountTypeAsync error: %s", jsonErr)
+	}
+	data <- result
+}
+
 func (ac *AccountClient) IsolatedGetAccountInfoAsync(data chan account.GetAccountInfoResponse, contractCode string, subUid int64) {
 	// ulr
 	url := ac.PUrlBuilder.Build(linearswap.POST_METHOD, "/linear-swap-api/v1/swap_account_info", nil)
