@@ -1,14 +1,16 @@
 ﻿package restful
 
 import (
-	"encoding/json"
 	"fmt"
+	jsoniter "github.com/json-iterator/go"
 	"go-huobi-futures/log"
 	"go-huobi-futures/reqbuilder"
 	"go-huobi-futures/swap"
 	requestorder "go-huobi-futures/swap/restful/request/order"
 	responseorder "go-huobi-futures/swap/restful/response/order"
 )
+
+var json = jsoniter.ConfigCompatibleWithStandardLibrary
 
 type OrderClient struct {
 	PUrlBuilder *reqbuilder.PrivateUrlBuilder

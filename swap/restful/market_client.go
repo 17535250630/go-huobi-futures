@@ -1,7 +1,6 @@
 ﻿package restful
 
 import (
-	"encoding/json"
 	"fmt"
 	"go-huobi-futures/log"
 	"go-huobi-futures/reqbuilder"

@@ -1,14 +1,16 @@
 ﻿package ws
 
 import (
-	"encoding/json"
 	"fmt"
+	jsoniter "github.com/json-iterator/go"
 	"go-huobi-futures/swap"
 	"go-huobi-futures/swap/ws/response/notify"
 	"go-huobi-futures/wsbase"
 	"reflect"
 	"strings"
 )
+
+var json = jsoniter.ConfigCompatibleWithStandardLibrary
 
 type WSNotifyClient struct {
 	WebSocketOp

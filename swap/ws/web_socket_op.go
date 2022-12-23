@@ -2,7 +2,6 @@
 
 import (
 	"container/list"
-	"encoding/json"
 	"fmt"
 	"go-huobi-futures/log"
 	"go-huobi-futures/reqbuilder"

@@ -1,7 +1,6 @@
 ﻿package ws
 
 import (
-	"encoding/json"
 	"fmt"
 	"go-huobi-futures/swap"
 	"go-huobi-futures/swap/ws/response/index"
