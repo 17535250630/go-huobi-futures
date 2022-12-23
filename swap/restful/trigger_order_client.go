@@ -2,11 +2,11 @@
 
 import (
 	"fmt"
-	"go-huobi-futures/log"
-	"go-huobi-futures/reqbuilder"
-	"go-huobi-futures/swap"
-	requesttiggerorder "go-huobi-futures/swap/restful/request/triggerorder"
-	responsetriggerorder "go-huobi-futures/swap/restful/response/triggerorder"
+	"github.com/17535250630/go-huobi-futures/log"
+	"github.com/17535250630/go-huobi-futures/reqbuilder"
+	"github.com/17535250630/go-huobi-futures/swap"
+	requesttiggerorder "github.com/17535250630/go-huobi-futures/swap/restful/request/triggerorder"
+	responsetriggerorder "github.com/17535250630/go-huobi-futures/swap/restful/response/triggerorder"
 )
 
 type TriggerOrderClient struct {

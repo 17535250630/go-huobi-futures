@@ -2,10 +2,10 @@
 
 import (
 	"fmt"
-	"go-huobi-futures/log"
-	"go-huobi-futures/reqbuilder"
-	"go-huobi-futures/swap"
-	"go-huobi-futures/swap/restful/response/market"
+	"github.com/17535250630/go-huobi-futures/log"
+	"github.com/17535250630/go-huobi-futures/reqbuilder"
+	"github.com/17535250630/go-huobi-futures/swap"
+	"github.com/17535250630/go-huobi-futures/swap/restful/response/market"
 )
 
 type MarketClient struct {

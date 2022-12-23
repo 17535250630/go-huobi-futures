@@ -2,10 +2,10 @@
 
 import (
 	"fmt"
+	"github.com/17535250630/go-huobi-futures/swap"
+	"github.com/17535250630/go-huobi-futures/swap/ws/response/notify"
+	"github.com/17535250630/go-huobi-futures/wsbase"
 	jsoniter "github.com/json-iterator/go"
-	"go-huobi-futures/swap"
-	"go-huobi-futures/swap/ws/response/notify"
-	"go-huobi-futures/wsbase"
 	"reflect"
 	"strings"
 )

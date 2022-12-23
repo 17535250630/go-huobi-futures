@@ -2,12 +2,12 @@
 
 import (
 	"fmt"
+	"github.com/17535250630/go-huobi-futures/log"
+	"github.com/17535250630/go-huobi-futures/reqbuilder"
+	"github.com/17535250630/go-huobi-futures/swap"
+	requestorder "github.com/17535250630/go-huobi-futures/swap/restful/request/order"
+	responseorder "github.com/17535250630/go-huobi-futures/swap/restful/response/order"
 	jsoniter "github.com/json-iterator/go"
-	"go-huobi-futures/log"
-	"go-huobi-futures/reqbuilder"
-	"go-huobi-futures/swap"
-	requestorder "go-huobi-futures/swap/restful/request/order"
-	responseorder "go-huobi-futures/swap/restful/response/order"
 )
 
 var json = jsoniter.ConfigCompatibleWithStandardLibrary

@@ -2,9 +2,9 @@
 
 import (
 	"fmt"
-	"go-huobi-futures/swap"
-	"go-huobi-futures/swap/ws/response/index"
-	"go-huobi-futures/wsbase"
+	"github.com/17535250630/go-huobi-futures/swap"
+	"github.com/17535250630/go-huobi-futures/swap/ws/response/index"
+	"github.com/17535250630/go-huobi-futures/wsbase"
 	"reflect"
 )
 

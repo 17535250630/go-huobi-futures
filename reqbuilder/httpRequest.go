@@ -1,7 +1,7 @@
 package reqbuilder
 
 import (
-	"go-huobi-futures/log"
+	"github.com/17535250630/go-huobi-futures/log"
 	"io/ioutil"
 	"net/http"
 	"strings"

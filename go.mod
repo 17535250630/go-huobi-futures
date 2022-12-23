@@ -1,4 +1,4 @@
-module go-huobi-futures
+module github.com/17535250630/go-huobi-futures
 
 go 1.19
 
