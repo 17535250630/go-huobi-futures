@@ -3,11 +3,11 @@
 import (
 	"encoding/json"
 	"fmt"
-	"huobi_futures_Golang/sdk/linearswap"
-	requestorder "huobi_futures_Golang/sdk/linearswap/restful/request/order"
-	responseorder "huobi_futures_Golang/sdk/linearswap/restful/response/order"
-	"huobi_futures_Golang/sdk/log"
-	"huobi_futures_Golang/sdk/reqbuilder"
+	"go-huobi-futures/log"
+	"go-huobi-futures/reqbuilder"
+	"go-huobi-futures/swap"
+	requestorder "go-huobi-futures/swap/restful/request/order"
+	responseorder "go-huobi-futures/swap/restful/response/order"
 )
 
 type OrderClient struct {
@@ -16,14 +16,14 @@ type OrderClient struct {
 
 func (oc *OrderClient) Init(accessKey string, secretKey string, host string) *OrderClient {
 	if host == "" {
-		host = linearswap.LINEAR_SWAP_DEFAULT_HOST
+		host = swap.LINEAR_SWAP_DEFAULT_HOST
 	}
 	oc.PUrlBuilder = new(reqbuilder.PrivateUrlBuilder).Init(accessKey, secretKey, host)
 	return oc
 }
 
 func (oc *OrderClient) IsolatedPlaceOrderAsync(data chan responseorder.PlaceOrderResponse, request requestorder.PlaceOrderRequest) {
-	url := oc.PUrlBuilder.Build(linearswap.POST_METHOD, "/linear-swap-api/v1/swap_order", nil)
+	url := oc.PUrlBuilder.Build(swap.POST_METHOD, "/linear-swap-api/v1/swap_order", nil)
 
 	content, err := json.Marshal(request)
 	if err != nil {
@@ -42,7 +42,7 @@ func (oc *OrderClient) IsolatedPlaceOrderAsync(data chan responseorder.PlaceOrde
 }
 
 func (oc *OrderClient) CrossPlaceOrderAsync(data chan responseorder.PlaceOrderResponse, request requestorder.PlaceOrderRequest) {
-	url := oc.PUrlBuilder.Build(linearswap.POST_METHOD, "/linear-swap-api/v1/swap_cross_order", nil)
+	url := oc.PUrlBuilder.Build(swap.POST_METHOD, "/linear-swap-api/v1/swap_cross_order", nil)
 
 	content, err := json.Marshal(request)
 	if err != nil {
@@ -62,7 +62,7 @@ func (oc *OrderClient) CrossPlaceOrderAsync(data chan responseorder.PlaceOrderRe
 
 func (oc *OrderClient) IsolatedPlaceBatchOrderAsync(data chan responseorder.PlaceBatchOrderResponse, requests requestorder.BatchPlaceOrderRequest) {
 	// url
-	url := oc.PUrlBuilder.Build(linearswap.POST_METHOD, "/linear-swap-api/v1/swap_batchorder", nil)
+	url := oc.PUrlBuilder.Build(swap.POST_METHOD, "/linear-swap-api/v1/swap_batchorder", nil)
 
 	// content
 	bdata, err := json.Marshal(requests)
@@ -86,7 +86,7 @@ func (oc *OrderClient) IsolatedPlaceBatchOrderAsync(data chan responseorder.Plac
 
 func (oc *OrderClient) CrossPlaceBatchOrderAsync(data chan responseorder.PlaceBatchOrderResponse, requests requestorder.BatchPlaceOrderRequest) {
 	// url
-	url := oc.PUrlBuilder.Build(linearswap.POST_METHOD, "/linear-swap-api/v1/swap_cross_batchorder", nil)
+	url := oc.PUrlBuilder.Build(swap.POST_METHOD, "/linear-swap-api/v1/swap_cross_batchorder", nil)
 
 	// content
 	bdata, err := json.Marshal(requests)
@@ -112,9 +112,9 @@ func (oc *OrderClient) IsolatedCancelOrderAsync(data chan responseorder.CancelOr
 	orderId string, clientOrderId string, offset string, direction string) {
 
 	// url
-	url := oc.PUrlBuilder.Build(linearswap.POST_METHOD, "/linear-swap-api/v1/swap_cancel", nil)
+	url := oc.PUrlBuilder.Build(swap.POST_METHOD, "/linear-swap-api/v1/swap_cancel", nil)
 	if orderId == "" && clientOrderId == "" {
-		url = oc.PUrlBuilder.Build(linearswap.POST_METHOD, "/linear-swap-api/v1/swap_cancelall", nil)
+		url = oc.PUrlBuilder.Build(swap.POST_METHOD, "/linear-swap-api/v1/swap_cancelall", nil)
 	}
 
 	// content
@@ -150,9 +150,9 @@ func (oc *OrderClient) IsolatedCancelOrderAsync(data chan responseorder.CancelOr
 func (oc *OrderClient) CrossCancelOrderAsync(data chan responseorder.CancelOrderResponse, contractCode string,
 	orderId string, clientOrderId string, offset string, direction string) {
 	// url
-	url := oc.PUrlBuilder.Build(linearswap.POST_METHOD, "/linear-swap-api/v1/swap_cross_cancel", nil)
+	url := oc.PUrlBuilder.Build(swap.POST_METHOD, "/linear-swap-api/v1/swap_cross_cancel", nil)
 	if orderId == "" && clientOrderId == "" {
-		url = oc.PUrlBuilder.Build(linearswap.POST_METHOD, "/linear-swap-api/v1/swap_cross_cancelall", nil)
+		url = oc.PUrlBuilder.Build(swap.POST_METHOD, "/linear-swap-api/v1/swap_cross_cancelall", nil)
 	}
 
 	// content
@@ -187,7 +187,7 @@ func (oc *OrderClient) CrossCancelOrderAsync(data chan responseorder.CancelOrder
 
 func (oc *OrderClient) IsolatedSwitchLeverRateAsync(data chan responseorder.SwitchLeverRateResponse, contractCode string, leverRate int) {
 	// url
-	url := oc.PUrlBuilder.Build(linearswap.POST_METHOD, "/linear-swap-api/v1/swap_switch_lever_rate", nil)
+	url := oc.PUrlBuilder.Build(swap.POST_METHOD, "/linear-swap-api/v1/swap_switch_lever_rate", nil)
 
 	// content
 	content := fmt.Sprintf("{\"contract_code\": \"%s\", \"lever_rate\": %d}", contractCode, leverRate)
@@ -206,7 +206,7 @@ func (oc *OrderClient) IsolatedSwitchLeverRateAsync(data chan responseorder.Swit
 
 func (oc *OrderClient) CrossSwitchPositionModeAsync(data chan responseorder.SwitchPositionModeResponse, positionMode string) {
 	// url
-	url := oc.PUrlBuilder.Build(linearswap.POST_METHOD, "/linear-swap-api/v1/swap_cross_switch_position_mode", nil)
+	url := oc.PUrlBuilder.Build(swap.POST_METHOD, "/linear-swap-api/v1/swap_cross_switch_position_mode", nil)
 
 	// content
 	content := fmt.Sprintf("{\"margin_account\": \"%s\", \"position_mode\": %s}", "USDT", positionMode)
@@ -225,7 +225,7 @@ func (oc *OrderClient) CrossSwitchPositionModeAsync(data chan responseorder.Swit
 
 func (oc *OrderClient) CrossSwitchLeverRateAsync(data chan responseorder.SwitchLeverRateResponse, contractCode string, leverRate int) {
 	// url
-	url := oc.PUrlBuilder.Build(linearswap.POST_METHOD, "/linear-swap-api/v1/swap_cross_switch_lever_rate", nil)
+	url := oc.PUrlBuilder.Build(swap.POST_METHOD, "/linear-swap-api/v1/swap_cross_switch_lever_rate", nil)
 
 	// content
 	content := fmt.Sprintf("{\"contract_code\": \"%s\", \"lever_rate\": %d}", contractCode, leverRate)
@@ -245,7 +245,7 @@ func (oc *OrderClient) CrossSwitchLeverRateAsync(data chan responseorder.SwitchL
 func (oc *OrderClient) IsolatedGetOrderInfoAsync(data chan responseorder.GetOrderInfoResponse, contractCode string,
 	orderId string, clientOrderId string) {
 	// url
-	url := oc.PUrlBuilder.Build(linearswap.POST_METHOD, "/linear-swap-api/v1/swap_order_info", nil)
+	url := oc.PUrlBuilder.Build(swap.POST_METHOD, "/linear-swap-api/v1/swap_order_info", nil)
 
 	// content
 	content := fmt.Sprintf(",\"contract_code\":\"%s\"", contractCode)
@@ -273,7 +273,7 @@ func (oc *OrderClient) IsolatedGetOrderInfoAsync(data chan responseorder.GetOrde
 
 func (oc *OrderClient) CrossGetOrderInfoAsync(data chan responseorder.GetOrderInfoResponse, contractCode string, orderId string, clientOrderId string) {
 	// url
-	url := oc.PUrlBuilder.Build(linearswap.POST_METHOD, "/linear-swap-api/v1/swap_cross_order_info", nil)
+	url := oc.PUrlBuilder.Build(swap.POST_METHOD, "/linear-swap-api/v1/swap_cross_order_info", nil)
 
 	// content
 	content := fmt.Sprintf(",\"contract_code\":\"%s\"", contractCode)
@@ -302,7 +302,7 @@ func (oc *OrderClient) CrossGetOrderInfoAsync(data chan responseorder.GetOrderIn
 func (oc *OrderClient) IsolatedGetOrderDetailAsync(data chan responseorder.GetOrderDetailResponse, contractCode string, orderId int64, createdAt int64,
 	orderType int, pageIndex int, pageSize int) {
 	// url
-	url := oc.PUrlBuilder.Build(linearswap.POST_METHOD, "/linear-swap-api/v1/swap_order_detail", nil)
+	url := oc.PUrlBuilder.Build(swap.POST_METHOD, "/linear-swap-api/v1/swap_order_detail", nil)
 
 	// content
 	content := fmt.Sprintf(",\"contract_code\": \"%s\", \"order_id\": %d", contractCode, orderId)
@@ -337,7 +337,7 @@ func (oc *OrderClient) IsolatedGetOrderDetailAsync(data chan responseorder.GetOr
 func (oc *OrderClient) CrossGetOrderDetailAsync(data chan responseorder.GetOrderDetailResponse, contractCode string, orderId int64, createdAt int64,
 	orderType int, pageIndex int, pageSize int) {
 	// url
-	url := oc.PUrlBuilder.Build(linearswap.POST_METHOD, "/linear-swap-api/v1/swap_cross_order_detail", nil)
+	url := oc.PUrlBuilder.Build(swap.POST_METHOD, "/linear-swap-api/v1/swap_cross_order_detail", nil)
 
 	// content
 	content := fmt.Sprintf(",\"contract_code\": \"%s\", \"order_id\": %d", contractCode, orderId)
@@ -372,7 +372,7 @@ func (oc *OrderClient) CrossGetOrderDetailAsync(data chan responseorder.GetOrder
 func (oc *OrderClient) IsolatedGetOpenOrderAsync(data chan responseorder.GetOpenOrderResponse, contractCode string,
 	pageIndex int, pageSize int, sortBy string, tradeType int) {
 	// url
-	url := oc.PUrlBuilder.Build(linearswap.POST_METHOD, "/linear-swap-api/v1/swap_openorders", nil)
+	url := oc.PUrlBuilder.Build(swap.POST_METHOD, "/linear-swap-api/v1/swap_openorders", nil)
 
 	// content
 	content := fmt.Sprintf(",\"contract_code\": \"%s\"", contractCode)
@@ -407,7 +407,7 @@ func (oc *OrderClient) IsolatedGetOpenOrderAsync(data chan responseorder.GetOpen
 func (oc *OrderClient) CrossGetOpenOrderAsync(data chan responseorder.GetOpenOrderResponse, contractCode string,
 	pageIndex int, pageSize int, sortBy string, tradeType int) {
 	// url
-	url := oc.PUrlBuilder.Build(linearswap.POST_METHOD, "/linear-swap-api/v1/swap_cross_openorders", nil)
+	url := oc.PUrlBuilder.Build(swap.POST_METHOD, "/linear-swap-api/v1/swap_cross_openorders", nil)
 
 	// content
 	content := fmt.Sprintf(",\"contract_code\": \"%s\"", contractCode)
@@ -442,7 +442,7 @@ func (oc *OrderClient) CrossGetOpenOrderAsync(data chan responseorder.GetOpenOrd
 func (oc *OrderClient) IsolatedGetHisOrderAsync(data chan responseorder.GetHisOrderResponse, contractCode string, tradeType int, fcType int, status string,
 	createDate int, pageIndex int, pageSize int, sortBy string) {
 	// url
-	url := oc.PUrlBuilder.Build(linearswap.POST_METHOD, "/linear-swap-api/v1/swap_hisorders", nil)
+	url := oc.PUrlBuilder.Build(swap.POST_METHOD, "/linear-swap-api/v1/swap_hisorders", nil)
 
 	// content
 	content := fmt.Sprintf(",\"contract_code\": \"%s\",\"trade_type\": \"%d\",\"type\": \"%d\",\"status\": \"%s\",\"create_date\": %d", contractCode, tradeType, fcType, status, createDate)
@@ -474,7 +474,7 @@ func (oc *OrderClient) IsolatedGetHisOrderAsync(data chan responseorder.GetHisOr
 func (oc *OrderClient) CrossGetHisOrderAsync(data chan responseorder.GetHisOrderResponse, contractCode string, tradeType int, fcType int, status string,
 	createDate int, pageIndex int, pageSize int, sortBy string) {
 	// url
-	url := oc.PUrlBuilder.Build(linearswap.POST_METHOD, "/linear-swap-api/v1/swap_cross_hisorders", nil)
+	url := oc.PUrlBuilder.Build(swap.POST_METHOD, "/linear-swap-api/v1/swap_cross_hisorders", nil)
 
 	// content
 	content := fmt.Sprintf(",\"contract_code\": \"%s\",\"trade_type\": \"%d\",\"type\": \"%d\",\"status\": \"%s\",\"create_date\": %d", contractCode, tradeType, fcType, status, createDate)
@@ -508,7 +508,7 @@ func (oc *OrderClient) IsolatedGetHisOrderExactAsync(data chan responseorder.Get
 	fromId int64, size int, direct string) {
 
 	// url
-	url := oc.PUrlBuilder.Build(linearswap.POST_METHOD, "/linear-swap-api/v1/swap_hisorders_exact", nil)
+	url := oc.PUrlBuilder.Build(swap.POST_METHOD, "/linear-swap-api/v1/swap_hisorders_exact", nil)
 
 	// content
 	content := fmt.Sprintf(",\"contract_code\": \"%s\",\"trade_type\": \"%d\",\"type\": \"%d\",\"status\": \"%s\"", contractCode, tradeType, fcType, status)
@@ -552,7 +552,7 @@ func (oc *OrderClient) CrossGetHisOrderExactAsync(data chan responseorder.GetHis
 	fromId int64, size int, direct string) {
 
 	// url
-	url := oc.PUrlBuilder.Build(linearswap.POST_METHOD, "/linear-swap-api/v1/swap_cross_hisorders_exact", nil)
+	url := oc.PUrlBuilder.Build(swap.POST_METHOD, "/linear-swap-api/v1/swap_cross_hisorders_exact", nil)
 
 	// content
 	content := fmt.Sprintf(",\"contract_code\": \"%s\",\"trade_type\": \"%d\",\"type\": \"%d\",\"status\": \"%s\"", contractCode, tradeType, fcType, status)
@@ -594,7 +594,7 @@ func (oc *OrderClient) CrossGetHisOrderExactAsync(data chan responseorder.GetHis
 func (oc *OrderClient) IsolatedGetHisMatchAsync(data chan responseorder.GetHisMatchResponse, contractCode string, tradeType int, createDate int,
 	pageIndex int, pageSize int) {
 	// url
-	url := oc.PUrlBuilder.Build(linearswap.POST_METHOD, "/linear-swap-api/v1/swap_matchresults", nil)
+	url := oc.PUrlBuilder.Build(swap.POST_METHOD, "/linear-swap-api/v1/swap_matchresults", nil)
 
 	// content
 	content := fmt.Sprintf(",\"contract_code\": \"%s\",\"trade_type\": %d,\"create_date\": %d", contractCode, tradeType, createDate)
@@ -623,7 +623,7 @@ func (oc *OrderClient) IsolatedGetHisMatchAsync(data chan responseorder.GetHisMa
 func (oc *OrderClient) CrossGetHisMatchAsync(data chan responseorder.GetHisMatchResponse, contractCode string, tradeType int, createDate int,
 	pageIndex int, pageSize int) {
 	// url
-	url := oc.PUrlBuilder.Build(linearswap.POST_METHOD, "/linear-swap-api/v1/swap_cross_matchresults", nil)
+	url := oc.PUrlBuilder.Build(swap.POST_METHOD, "/linear-swap-api/v1/swap_cross_matchresults", nil)
 
 	// content
 	content := fmt.Sprintf(",\"contract_code\": \"%s\",\"trade_type\": %d,\"create_date\": %d", contractCode, tradeType, createDate)
@@ -652,7 +652,7 @@ func (oc *OrderClient) CrossGetHisMatchAsync(data chan responseorder.GetHisMatch
 func (oc *OrderClient) IsolatedGetHisMatchExactAsync(data chan responseorder.GetHisMatchExactResponse, contractCode string,
 	tradeType int, startTime int64, endTime int64, fromId int64, size int, direct string) {
 	// url
-	url := oc.PUrlBuilder.Build(linearswap.POST_METHOD, "/linear-swap-api/v1/swap_matchresults_exact", nil)
+	url := oc.PUrlBuilder.Build(swap.POST_METHOD, "/linear-swap-api/v1/swap_matchresults_exact", nil)
 
 	// content
 	content := fmt.Sprintf(",\"contract_code\": \"%s\",\"trade_type\": %d", contractCode, tradeType)
@@ -691,7 +691,7 @@ func (oc *OrderClient) IsolatedGetHisMatchExactAsync(data chan responseorder.Get
 func (oc *OrderClient) CrossGetHisMatchExactAsync(data chan responseorder.GetHisMatchExactResponse, contractCode string,
 	tradeType int, startTime int64, endTime int64, fromId int64, size int, direct string) {
 	// url
-	url := oc.PUrlBuilder.Build(linearswap.POST_METHOD, "/linear-swap-api/v1/swap_cross_matchresults_exact", nil)
+	url := oc.PUrlBuilder.Build(swap.POST_METHOD, "/linear-swap-api/v1/swap_cross_matchresults_exact", nil)
 
 	// content
 	content := fmt.Sprintf(",\"contract_code\": \"%s\",\"trade_type\": %d", contractCode, tradeType)
@@ -730,7 +730,7 @@ func (oc *OrderClient) CrossGetHisMatchExactAsync(data chan responseorder.GetHis
 func (oc *OrderClient) IsolatedLightningCloseAsync(data chan responseorder.LightningCloseResponse, contractCode string, volume int, direction string,
 	clientOrderId int64, orderPriceType string) {
 	// url
-	url := oc.PUrlBuilder.Build(linearswap.POST_METHOD, "/linear-swap-api/v1/swap_lightning_close_position", nil)
+	url := oc.PUrlBuilder.Build(swap.POST_METHOD, "/linear-swap-api/v1/swap_lightning_close_position", nil)
 
 	// content
 	content := fmt.Sprintf(",\"contract_code\": \"%s\",\"volume\": %d,\"direction\": \"%s\"", contractCode, volume, direction)
@@ -759,7 +759,7 @@ func (oc *OrderClient) IsolatedLightningCloseAsync(data chan responseorder.Light
 func (oc *OrderClient) CrossLightningCloseAsync(data chan responseorder.LightningCloseResponse, contractCode string, volume int, direction string,
 	clientOrderId int64, orderPriceType string) {
 	// url
-	url := oc.PUrlBuilder.Build(linearswap.POST_METHOD, "/linear-swap-api/v1/swap_cross_lightning_close_position", nil)
+	url := oc.PUrlBuilder.Build(swap.POST_METHOD, "/linear-swap-api/v1/swap_cross_lightning_close_position", nil)
 
 	// content
 	content := fmt.Sprintf(",\"contract_code\": \"%s\",\"volume\": %d,\"direction\": \"%s\"", contractCode, volume, direction)

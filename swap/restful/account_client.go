@@ -3,10 +3,10 @@
 import (
 	"encoding/json"
 	"fmt"
-	"huobi_futures_Golang/sdk/linearswap"
-	"huobi_futures_Golang/sdk/linearswap/restful/response/account"
-	"huobi_futures_Golang/sdk/log"
-	"huobi_futures_Golang/sdk/reqbuilder"
+	"go-huobi-futures/log"
+	"go-huobi-futures/reqbuilder"
+	"go-huobi-futures/swap"
+	"go-huobi-futures/swap/restful/response/account"
 )
 
 type AccountClient struct {
@@ -15,7 +15,7 @@ type AccountClient struct {
 
 func (ac *AccountClient) Init(accessKey string, secretKey string, host string) *AccountClient {
 	if host == "" {
-		host = linearswap.LINEAR_SWAP_DEFAULT_HOST
+		host = swap.LINEAR_SWAP_DEFAULT_HOST
 	}
 	ac.PUrlBuilder = new(reqbuilder.PrivateUrlBuilder).Init(accessKey, secretKey, host)
 	return ac
@@ -23,7 +23,7 @@ func (ac *AccountClient) Init(accessKey string, secretKey string, host string) *
 
 func (ac *AccountClient) GetBalanceValuationAsync(data chan account.GetBalanceValuationResponse, valuationAsset string) {
 	// ulr
-	url := ac.PUrlBuilder.Build(linearswap.POST_METHOD, "/linear-swap-api/v1/swap_balance_valuation", nil)
+	url := ac.PUrlBuilder.Build(swap.POST_METHOD, "/linear-swap-api/v1/swap_balance_valuation", nil)
 
 	// content
 	content := ""
@@ -47,7 +47,7 @@ func (ac *AccountClient) GetBalanceValuationAsync(data chan account.GetBalanceVa
 }
 
 func (ac *AccountClient) GetAccountTypeAsync(data chan account.GetAccountTypeResponse) {
-	url := ac.PUrlBuilder.Build(linearswap.POST_METHOD, "/linear-swap-api/v3/swap_unified_account_type", nil)
+	url := ac.PUrlBuilder.Build(swap.POST_METHOD, "/linear-swap-api/v3/swap_unified_account_type", nil)
 
 	getResp, getErr := reqbuilder.HttpGet(url)
 	if getErr != nil {
@@ -62,7 +62,7 @@ func (ac *AccountClient) GetAccountTypeAsync(data chan account.GetAccountTypeRes
 }
 
 func (ac *AccountClient) SwitchAccountTypeAsync(data chan account.SwitchAccountType) {
-	url := ac.PUrlBuilder.Build(linearswap.POST_METHOD, "/linear-swap-api/v3/swap_switch_account_type", nil)
+	url := ac.PUrlBuilder.Build(swap.POST_METHOD, "/linear-swap-api/v3/swap_switch_account_type", nil)
 	content := fmt.Sprintf("{\"account_type\": %d}", 1)
 	getResp, getErr := reqbuilder.HttpPost(url, content)
 	if getErr != nil {
@@ -78,9 +78,9 @@ func (ac *AccountClient) SwitchAccountTypeAsync(data chan account.SwitchAccountT
 
 func (ac *AccountClient) IsolatedGetAccountInfoAsync(data chan account.GetAccountInfoResponse, contractCode string, subUid int64) {
 	// ulr
-	url := ac.PUrlBuilder.Build(linearswap.POST_METHOD, "/linear-swap-api/v1/swap_account_info", nil)
+	url := ac.PUrlBuilder.Build(swap.POST_METHOD, "/linear-swap-api/v1/swap_account_info", nil)
 	if subUid != 0 {
-		url = ac.PUrlBuilder.Build(linearswap.POST_METHOD, "/linear-swap-api/v1/swap_sub_account_info", nil)
+		url = ac.PUrlBuilder.Build(swap.POST_METHOD, "/linear-swap-api/v1/swap_sub_account_info", nil)
 	}
 
 	// content
@@ -109,9 +109,9 @@ func (ac *AccountClient) IsolatedGetAccountInfoAsync(data chan account.GetAccoun
 
 func (ac *AccountClient) CrossGetAccountInfoAsync(data chan account.GetAccountInfoResponse, marginAccount string, subUid int64) {
 	// ulr
-	url := ac.PUrlBuilder.Build(linearswap.POST_METHOD, "/linear-swap-api/v1/swap_cross_account_info", nil)
+	url := ac.PUrlBuilder.Build(swap.POST_METHOD, "/linear-swap-api/v1/swap_cross_account_info", nil)
 	if subUid != 0 {
-		url = ac.PUrlBuilder.Build(linearswap.POST_METHOD, "/linear-swap-api/v1/swap_cross_sub_account_info", nil)
+		url = ac.PUrlBuilder.Build(swap.POST_METHOD, "/linear-swap-api/v1/swap_cross_sub_account_info", nil)
 	}
 
 	// content
@@ -140,9 +140,9 @@ func (ac *AccountClient) CrossGetAccountInfoAsync(data chan account.GetAccountIn
 
 func (ac *AccountClient) IsolatedGetAccountPositionAsync(data chan account.GetAccountPositionResponse, contractCode string, subUid int64) {
 	// ulr
-	url := ac.PUrlBuilder.Build(linearswap.POST_METHOD, "/linear-swap-api/v1/swap_position_info", nil)
+	url := ac.PUrlBuilder.Build(swap.POST_METHOD, "/linear-swap-api/v1/swap_position_info", nil)
 	if subUid != 0 {
-		url = ac.PUrlBuilder.Build(linearswap.POST_METHOD, "/linear-swap-api/v1/swap_sub_account_info", nil)
+		url = ac.PUrlBuilder.Build(swap.POST_METHOD, "/linear-swap-api/v1/swap_sub_account_info", nil)
 	}
 
 	// content
@@ -170,9 +170,9 @@ func (ac *AccountClient) IsolatedGetAccountPositionAsync(data chan account.GetAc
 
 func (ac *AccountClient) CrossGetAccountPositionAsync(data chan account.GetAccountPositionResponse, contractCode string, subUid int64) {
 	// ulr
-	url := ac.PUrlBuilder.Build(linearswap.POST_METHOD, "/linear-swap-api/v1/swap_cross_position_info", nil)
+	url := ac.PUrlBuilder.Build(swap.POST_METHOD, "/linear-swap-api/v1/swap_cross_position_info", nil)
 	if subUid != 0 {
-		url = ac.PUrlBuilder.Build(linearswap.POST_METHOD, "/linear-swap-api/v1/swap_cross_sub_position_info", nil)
+		url = ac.PUrlBuilder.Build(swap.POST_METHOD, "/linear-swap-api/v1/swap_cross_sub_position_info", nil)
 	}
 
 	// content
@@ -200,7 +200,7 @@ func (ac *AccountClient) CrossGetAccountPositionAsync(data chan account.GetAccou
 
 func (ac *AccountClient) IsolatedGetAssetsPositionAsync(data chan account.GetAssetsPositionResponse, contractCode string) {
 	// ulr
-	url := ac.PUrlBuilder.Build(linearswap.POST_METHOD, "/linear-swap-api/v1/swap_account_position_info", nil)
+	url := ac.PUrlBuilder.Build(swap.POST_METHOD, "/linear-swap-api/v1/swap_account_position_info", nil)
 
 	// content
 	content := fmt.Sprintf("{\"contract_code\": \"%s\"}", contractCode)
@@ -219,7 +219,7 @@ func (ac *AccountClient) IsolatedGetAssetsPositionAsync(data chan account.GetAss
 
 func (ac *AccountClient) CrossGetAssetsPositionAsync(data chan account.GetAssetsPositionResponseSingle, marginAccount string) {
 	// ulr
-	url := ac.PUrlBuilder.Build(linearswap.POST_METHOD, "/linear-swap-api/v1/swap_cross_account_position_info", nil)
+	url := ac.PUrlBuilder.Build(swap.POST_METHOD, "/linear-swap-api/v1/swap_cross_account_position_info", nil)
 
 	// content
 	content := fmt.Sprintf("{\"margin_account\": \"%s\"}", marginAccount)
@@ -238,7 +238,7 @@ func (ac *AccountClient) CrossGetAssetsPositionAsync(data chan account.GetAssets
 
 func (ac *AccountClient) SetSubAuthAsync(data chan account.SetSubAuthResponse, subUid string, subAuth int) {
 	// ulr
-	url := ac.PUrlBuilder.Build(linearswap.POST_METHOD, "/linear-swap-api/v1/swap_sub_auth", nil)
+	url := ac.PUrlBuilder.Build(swap.POST_METHOD, "/linear-swap-api/v1/swap_sub_auth", nil)
 
 	// content
 	content := fmt.Sprintf("{\"sub_uid\": \"%s\", \"sub_auth\": %d}", subUid, subAuth)
@@ -257,7 +257,7 @@ func (ac *AccountClient) SetSubAuthAsync(data chan account.SetSubAuthResponse, s
 
 func (ac *AccountClient) IsolatedGetSubAccountListResponseAsync(data chan account.GetSubAccountListResponse, contractCode string) {
 	// ulr
-	url := ac.PUrlBuilder.Build(linearswap.POST_METHOD, "/linear-swap-api/v1/swap_sub_account_list", nil)
+	url := ac.PUrlBuilder.Build(swap.POST_METHOD, "/linear-swap-api/v1/swap_sub_account_list", nil)
 
 	// content
 	content := ""
@@ -282,7 +282,7 @@ func (ac *AccountClient) IsolatedGetSubAccountListResponseAsync(data chan accoun
 
 func (ac *AccountClient) CrossGetSubAccountListAsync(data chan account.GetSubAccountListResponse, marginAccount string) {
 	// ulr
-	url := ac.PUrlBuilder.Build(linearswap.POST_METHOD, "/linear-swap-api/v1/swap_cross_sub_account_list", nil)
+	url := ac.PUrlBuilder.Build(swap.POST_METHOD, "/linear-swap-api/v1/swap_cross_sub_account_list", nil)
 
 	// content
 	content := ""
@@ -308,7 +308,7 @@ func (ac *AccountClient) CrossGetSubAccountListAsync(data chan account.GetSubAcc
 func (ac *AccountClient) IsolatedGetSubAccountInfoListAsync(data chan account.GetSubAccountInfoListResponse,
 	contractCode string, pageIndex int, pageSize int) {
 	// ulr
-	url := ac.PUrlBuilder.Build(linearswap.POST_METHOD, "/linear-swap-api/v1/swap_sub_account_info_list", nil)
+	url := ac.PUrlBuilder.Build(swap.POST_METHOD, "/linear-swap-api/v1/swap_sub_account_info_list", nil)
 
 	// content
 	content := ""
@@ -340,7 +340,7 @@ func (ac *AccountClient) IsolatedGetSubAccountInfoListAsync(data chan account.Ge
 func (ac *AccountClient) CrossGetSubAccountInfoListAsync(data chan account.GetSubAccountInfoListResponse,
 	marginAccount string, pageIndex int, pageSize int) {
 	// ulr
-	url := ac.PUrlBuilder.Build(linearswap.POST_METHOD, "/linear-swap-api/v1/swap_cross_sub_account_info_list", nil)
+	url := ac.PUrlBuilder.Build(swap.POST_METHOD, "/linear-swap-api/v1/swap_cross_sub_account_info_list", nil)
 
 	// content
 	content := ""
@@ -372,9 +372,9 @@ func (ac *AccountClient) CrossGetSubAccountInfoListAsync(data chan account.GetSu
 func (ac *AccountClient) AccountTransferAsync(data chan account.AccountTransferResponse, asset string, fromMarginAccount string, toMarginAccount string, amount float64,
 	subUid int64, fcType string) {
 	// ulr
-	url := ac.PUrlBuilder.Build(linearswap.POST_METHOD, "/linear-swap-api/v1/swap_master_sub_transfer", nil)
+	url := ac.PUrlBuilder.Build(swap.POST_METHOD, "/linear-swap-api/v1/swap_master_sub_transfer", nil)
 	if subUid == 0 {
-		url = ac.PUrlBuilder.Build(linearswap.POST_METHOD, "/linear-swap-api/v1/swap_transfer_inner", nil)
+		url = ac.PUrlBuilder.Build(swap.POST_METHOD, "/linear-swap-api/v1/swap_transfer_inner", nil)
 	}
 
 	// content
@@ -401,9 +401,9 @@ func (ac *AccountClient) AccountTransferAsync(data chan account.AccountTransferR
 func (ac *AccountClient) GetAccountTransHisAsync(data chan account.GetAccountTransHisResponse, marginAccount string,
 	beMasterSub bool, fcType string, createDate int, pageIndex int, pageSize int) {
 	// ulr
-	url := ac.PUrlBuilder.Build(linearswap.POST_METHOD, "/linear-swap-api/v1/swap_financial_record", nil)
+	url := ac.PUrlBuilder.Build(swap.POST_METHOD, "/linear-swap-api/v1/swap_financial_record", nil)
 	if beMasterSub {
-		url = ac.PUrlBuilder.Build(linearswap.POST_METHOD, "/linear-swap-api/v1/swap_master_sub_transfer_record", nil)
+		url = ac.PUrlBuilder.Build(swap.POST_METHOD, "/linear-swap-api/v1/swap_master_sub_transfer_record", nil)
 	}
 
 	// content
@@ -447,7 +447,7 @@ func (ac *AccountClient) GetAccountTransHisAsync(data chan account.GetAccountTra
 func (ac *AccountClient) GetFinancialRecordExactAsync(data chan account.GetFinancialRecordExactResponse, marginAccount string,
 	contractCode string, fcType string, startTime int64, endTime int64, fromId int64, size int, direct string) {
 	// ulr
-	url := ac.PUrlBuilder.Build(linearswap.POST_METHOD, "/linear-swap-api/v1/swap_financial_record_exact", nil)
+	url := ac.PUrlBuilder.Build(swap.POST_METHOD, "/linear-swap-api/v1/swap_financial_record_exact", nil)
 
 	// content
 	content := fmt.Sprintf(",\"margin_account\": \"%s\"", marginAccount)
@@ -491,7 +491,7 @@ func (ac *AccountClient) GetFinancialRecordExactAsync(data chan account.GetFinan
 func (ac *AccountClient) IsolatedGetSettlementRecordsAsync(data chan account.IsolatedGetSettlementRecordsResponse, contractCode string,
 	startTime int64, endTime int64, pageIndex int, pageSize int) {
 	// ulr
-	url := ac.PUrlBuilder.Build(linearswap.POST_METHOD, "/linear-swap-api/v1/swap_user_settlement_records", nil)
+	url := ac.PUrlBuilder.Build(swap.POST_METHOD, "/linear-swap-api/v1/swap_user_settlement_records", nil)
 
 	// content
 	content := fmt.Sprintf(",\"contract_code\": \"%s\"", contractCode)
@@ -526,7 +526,7 @@ func (ac *AccountClient) IsolatedGetSettlementRecordsAsync(data chan account.Iso
 func (ac *AccountClient) CrossGetSettlementRecordsAsync(data chan account.CrossGetSettlementRecordsResponse, marginAccount string,
 	startTime int64, endTime int64, pageIndex int, pageSize int) {
 	// ulr
-	url := ac.PUrlBuilder.Build(linearswap.POST_METHOD, "/linear-swap-api/v1/swap_cross_user_settlement_records", nil)
+	url := ac.PUrlBuilder.Build(swap.POST_METHOD, "/linear-swap-api/v1/swap_cross_user_settlement_records", nil)
 
 	// content
 	content := fmt.Sprintf(",\"margin_account\": \"%s\"", marginAccount)
@@ -560,7 +560,7 @@ func (ac *AccountClient) CrossGetSettlementRecordsAsync(data chan account.CrossG
 
 func (ac *AccountClient) IsolatedGetValidLeverRateAsync(data chan account.GetValidLeverRateResponse, contractCode string) {
 	// ulr
-	url := ac.PUrlBuilder.Build(linearswap.POST_METHOD, "/linear-swap-api/v1/swap_available_level_rate", nil)
+	url := ac.PUrlBuilder.Build(swap.POST_METHOD, "/linear-swap-api/v1/swap_available_level_rate", nil)
 
 	// content
 	content := fmt.Sprintf("{ \"contract_code\": \"%s\" }", contractCode)
@@ -578,7 +578,7 @@ func (ac *AccountClient) IsolatedGetValidLeverRateAsync(data chan account.GetVal
 
 func (ac *AccountClient) CrossGetValidLeverRateAsync(data chan account.GetValidLeverRateResponse, contractCode string) {
 	// ulr
-	url := ac.PUrlBuilder.Build(linearswap.POST_METHOD, "/linear-swap-api/v1/swap_cross_available_level_rate", nil)
+	url := ac.PUrlBuilder.Build(swap.POST_METHOD, "/linear-swap-api/v1/swap_cross_available_level_rate", nil)
 
 	// content
 	content := fmt.Sprintf("{ \"contract_code\": \"%s\" }", contractCode)
@@ -596,7 +596,7 @@ func (ac *AccountClient) CrossGetValidLeverRateAsync(data chan account.GetValidL
 
 func (ac *AccountClient) GetOrderLimitAsync(data chan account.GetOrderLimitResponse, orderPriceType string, contractCode string) {
 	// ulr
-	url := ac.PUrlBuilder.Build(linearswap.POST_METHOD, "/linear-swap-api/v1/swap_order_limit", nil)
+	url := ac.PUrlBuilder.Build(swap.POST_METHOD, "/linear-swap-api/v1/swap_order_limit", nil)
 
 	// content
 	content := fmt.Sprintf(",\"order_price_type\":\"%s\"", orderPriceType)
@@ -620,7 +620,7 @@ func (ac *AccountClient) GetOrderLimitAsync(data chan account.GetOrderLimitRespo
 
 func (ac *AccountClient) GetFeeAsync(data chan account.GetFeeResponse, contractCode string) {
 	// ulr
-	url := ac.PUrlBuilder.Build(linearswap.POST_METHOD, "/linear-swap-api/v1/swap_fee", nil)
+	url := ac.PUrlBuilder.Build(swap.POST_METHOD, "/linear-swap-api/v1/swap_fee", nil)
 
 	// content
 	content := fmt.Sprintf("{ \"contract_code\": \"%s\" }", contractCode)
@@ -638,7 +638,7 @@ func (ac *AccountClient) GetFeeAsync(data chan account.GetFeeResponse, contractC
 
 func (ac *AccountClient) IsolatedGetTransferLimitAsync(data chan account.GetTransferLimitResponse, contractCode string) {
 	// ulr
-	url := ac.PUrlBuilder.Build(linearswap.POST_METHOD, "/linear-swap-api/v1/swap_transfer_limit", nil)
+	url := ac.PUrlBuilder.Build(swap.POST_METHOD, "/linear-swap-api/v1/swap_transfer_limit", nil)
 
 	// content
 	content := ""
@@ -662,7 +662,7 @@ func (ac *AccountClient) IsolatedGetTransferLimitAsync(data chan account.GetTran
 
 func (ac *AccountClient) CrossGetTransferLimitAsync(data chan account.GetTransferLimitResponse, marginAccount string) {
 	// ulr
-	url := ac.PUrlBuilder.Build(linearswap.POST_METHOD, "/linear-swap-api/v1/swap_cross_transfer_limit", nil)
+	url := ac.PUrlBuilder.Build(swap.POST_METHOD, "/linear-swap-api/v1/swap_cross_transfer_limit", nil)
 
 	// content
 	content := ""
@@ -686,7 +686,7 @@ func (ac *AccountClient) CrossGetTransferLimitAsync(data chan account.GetTransfe
 
 func (ac *AccountClient) IsolatedGetPositionLimitAsync(data chan account.GetPositionLimitResponse, contractCode string) {
 	// ulr
-	url := ac.PUrlBuilder.Build(linearswap.POST_METHOD, "/linear-swap-api/v1/swap_position_limit", nil)
+	url := ac.PUrlBuilder.Build(swap.POST_METHOD, "/linear-swap-api/v1/swap_position_limit", nil)
 
 	// content
 	content := ""
@@ -710,7 +710,7 @@ func (ac *AccountClient) IsolatedGetPositionLimitAsync(data chan account.GetPosi
 
 func (ac *AccountClient) CrossGetPositionLimitAsync(data chan account.GetPositionLimitResponse, contractCode string) {
 	// ulr
-	url := ac.PUrlBuilder.Build(linearswap.POST_METHOD, "/linear-swap-api/v1/swap_cross_position_limit", nil)
+	url := ac.PUrlBuilder.Build(swap.POST_METHOD, "/linear-swap-api/v1/swap_cross_position_limit", nil)
 
 	// content
 	content := ""
@@ -734,7 +734,7 @@ func (ac *AccountClient) CrossGetPositionLimitAsync(data chan account.GetPositio
 
 func (ac *AccountClient) GetApiTradingStatusAsync(data chan account.GetApiTradingStatusResponse, contractCode string) {
 	// ulr
-	url := ac.PUrlBuilder.Build(linearswap.GET_METHOD, "/linear-swap-api/v1/swap_api_trading_status", nil)
+	url := ac.PUrlBuilder.Build(swap.GET_METHOD, "/linear-swap-api/v1/swap_api_trading_status", nil)
 
 	// content is nil
 	getResp, getErr := reqbuilder.HttpGet(url)
